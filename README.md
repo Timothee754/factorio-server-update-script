@@ -16,3 +16,5 @@ This manager aims to automate common tasks as much as possible, while remaining 
 
 - Création d'une interface web pour les serveurs (implique gestion de shells pour différents serveurs, répartition de charges, capacité à utiliser l'API de l'hyperviseur, ...)
 
+
+## Nécessaires à modifier
