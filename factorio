@@ -1,0 +1,108 @@
+#/opt/factorio/bin/x64/factorio --start-server multisurvivalKillexTeemo.zip 
+
+#/opt/factorio/bin/x64/factorio --start-server newgame.zip
+
+
+#!/bin/bash
+
+SAVE_DIR="/opt/factorio/saves"
+FACTORIO_BIN="/opt/factorio/bin/x64/factorio"
+
+afficher_menu() {
+  echo "----------------------------------"
+  echo "         MENU FACTORIO"
+  echo "----------------------------------"
+  echo "1) Lister les serveurs Factorio"
+  echo "2) Créer un serveur Factorio"
+  echo "3) Lancer un serveur Factorio (numéro)"
+  echo "4) Supprimer un serveur Factorio"
+  echo "5) Quitter"
+  echo "----------------------------------"
+}
+
+while true; do
+  afficher_menu
+  read -p "Entrez votre choix [1-5] : " choix
+
+  case $choix in
+    1)
+      echo "Liste des mondes Factorio disponibles :"
+      if [ -d "$SAVE_DIR" ]; then
+        files=($(ls -1 "$SAVE_DIR"/*.zip 2>/dev/null))
+        if [ ${#files[@]} -eq 0 ]; then
+          echo "Aucune sauvegarde trouvée dans $SAVE_DIR"
+        else
+          i=1
+          for file in "${files[@]}"; do
+            echo "$i) $(basename "$file")"
+            ((i++))
+          done
+        fi
+      else
+        echo "Le dossier $SAVE_DIR n'existe pas."
+      fi
+      ;;
+    2)
+      read -p "Nom de la nouvelle survie : " nom_survie
+      if [[ "$nom_survie" =~ ^[a-zA-Z0-9_-]+$ ]]; then
+        echo "Création du monde $nom_survie.zip..."
+        "$FACTORIO_BIN" --create "$SAVE_DIR/$nom_survie.zip"
+      else
+        echo "Nom invalide. Utilisez uniquement des lettres, chiffres, - ou _"
+      fi
+      ;;
+    3)
+      echo "Sélectionnez un monde à lancer :"
+      files=($(ls -1 "$SAVE_DIR"/*.zip 2>/dev/null))
+      if [ ${#files[@]} -eq 0 ]; then
+        echo "Aucune sauvegarde à lancer."
+      else
+        i=1
+        for file in "${files[@]}"; do
+          echo "$i) $(basename "$file")"
+          ((i++))
+        done
+        read -p "Numéro du monde à lancer : " num
+        index=$((num - 1))
+        if [[ $num =~ ^[0-9]+$ ]] && [ $index -ge 0 ] && [ $index -lt ${#files[@]} ]; then
+          save_file="${files[$index]}"
+          echo "Lancement du serveur avec $(basename "$save_file")..."
+          "$FACTORIO_BIN" --start-server "$save_file"
+        else
+          echo "Numéro invalide."
+        fi
+      fi
+      ;;
+    4)
+      echo "Sélectionnez un monde à supprimer :"
+      files=($(ls -1 "$SAVE_DIR"/*.zip 2>/dev/null))
+      if [ ${#files[@]} -eq 0 ]; then
+        echo "Aucune sauvegarde à supprimer."
+      else
+        i=1
+        for file in "${files[@]}"; do
+          echo "$i) $(basename "$file")"
+          ((i++))
+        done
+        read -p "Numéro du monde à supprimer : " suppr_num
+        index=$((suppr_num - 1))
+        if [[ $suppr_num =~ ^[0-9]+$ ]] && [ $index -ge 0 ] && [ $index -lt ${#files[@]} ]; then
+          rm -i "${files[$index]}"
+        else
+          echo "Numéro invalide."
+        fi
+      fi
+      ;;
+    5)
+      echo "Au revoir !"
+      break
+      ;;
+    *)
+      echo "Option invalide. Veuillez entrer un nombre entre 1 et 5."
+      ;;
+  esac
+
+  echo ""
+  read -p "Appuyez sur Entrée pour continuer..." pause
+  clear
+done
