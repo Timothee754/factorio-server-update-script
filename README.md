@@ -15,6 +15,7 @@ This manager aims to automate common tasks as much as possible, while remaining 
 ## Fonctionnalités à venir
 
 - Création d'une interface web pour les serveurs (implique gestion de shells pour différents serveurs, répartition de charges, capacité à utiliser l'API de l'hyperviseur, ...)
-
+- Option de mise à jour du logiciel (Mise à jour du script via CLI)
+- Rcherches et catégorisation des logs (Erreurs 1 et 2 --> Erreur de mods, si erreur 3 = erreur de version --> Lancer mise à jour etc...)
 
 ## Nécessaires à modifier
