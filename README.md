@@ -20,3 +20,4 @@ This manager aims to automate common tasks as much as possible.
 ## Need to be modified
 - The update script assumes that the user is root; take into account a regular user
 - Ensure that it is a specific user who can write to the log file; write permission for the log file is only granted to its owner to ensure it cannot be modified. In the future, the objective is to setup a Linux cron or whatever else that makes statistics, that will be available through an API, etc... (you see where i'm coming hehe?)
+- Make an install.sh which puts scripts in the use/local/bin, tells the user what to do to install factorio, also sets environnement variables (location of log file,...)
